@@ -1,7 +1,6 @@
-#ifndef __ModuleRenderExercise_h__
-#define __ModuleRenderExercise_h__
-
+#pragma once
 #include "Module.h"
+#include "MathGeoLib.h"
 
 class ModuleRenderExercise : public Module
 {
@@ -15,7 +14,10 @@ public:
 
 private:
     unsigned vbo        = 0;
-
+	float xRot, yRot, zRot, xT, yT, zT, xS, yS, zS;
+	math::float4x4 proj;
+	math::float4x4 view;
+	math::float4x4 model;
 };
 
-#endif /* __ModuleRenderExercise_h__ */
+
