@@ -26,10 +26,11 @@ bool ModuleProgram::Init()
 	{
 		GLint maxLength = 0;
 		glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
-		std::vector<GLchar> infoLog(maxLength);
+		GLchar* infoLog = (GLchar*) malloc(sizeof(char) * (maxLength + 1));
 		glGetShaderInfoLog(vs, maxLength, &maxLength, &infoLog[0]);
 		glDeleteShader(vs);
 		LOG("Vertex shader compilation error: %s", infoLog);
+		free(infoLog);
 		return false;
 	}
 	
@@ -45,10 +46,11 @@ bool ModuleProgram::Init()
 	{
 		GLint maxLength = 0;
 		glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &maxLength);
-		std::vector<GLchar> infoLog(maxLength);
+		GLchar* infoLog = (GLchar*)malloc(sizeof(char) * (maxLength + 1));
 		glGetShaderInfoLog(fs, maxLength, &maxLength, &infoLog[0]);
 		glDeleteShader(fs);
 		LOG("Fragment shader compilation error: %s", infoLog);
+		free(infoLog);
 		return false;
 	}
 
@@ -59,16 +61,17 @@ bool ModuleProgram::Init()
 
 	GLint isLinked = 0;
 	glGetShaderiv(fs, GL_COMPILE_STATUS, &isLinked);
-	if (isCompiled == GL_FALSE)
+	if (isLinked == GL_FALSE)
 	{
 		GLint maxLength = 0;
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-		std::vector<GLchar> infoLog(maxLength);
+		GLchar* infoLog = (GLchar*)malloc(sizeof(char) * (maxLength + 1));
 		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 		glDeleteProgram(program);
 		glDeleteShader(vs);
 		glDeleteShader(fs);
 		LOG("Program Linking error: %s", infoLog);
+		free(infoLog);
 		return false;
 	}
 
