@@ -29,16 +29,6 @@ bool ModuleRenderExercise::Init()
 	yS = 1;
 	zS = 1;
 
-	math::float4x4 tMat = float4x4::identity;
-	tMat[0][3] = xT; tMat[1][3] = yT; tMat[2][3] = zT;
-
-	math::float4x4 rMat = math::Quat::FromEulerXYZ(xRot, yRot, zRot).ToFloat4x4();
-
-	math::float4x4 sMat = float4x4::identity;
-	sMat[0][0] *= xS; sMat[1][1] *= yS; sMat[2][2] *= zS;
-
-	model =  sMat * tMat * rMat;
-
 	//View
 	float3 target(0, 0, 0);
 	float3 eye(0, 0, 5);
@@ -71,13 +61,6 @@ bool ModuleRenderExercise::Init()
 	float4 v2(1.0f, -1.0f, 0.0f, 1.0f);
 	float4 v3(0.0f, 1.0f, 0.0f, 1.0f);
 
-	v1 = (proj * view * model * v1);
-	v1 /= v1[3];
-	v2 = (proj * view * model * v2);
-	v2 /= v2[3];
-	v3 = (proj * view * model * v3);
-	v3 /= v3[3];
-
     float vertex_buffer_data[] = {
         v1[0], v1[1], v1[2],
 		v2[0], v2[1], v2[2],
@@ -94,6 +77,27 @@ bool ModuleRenderExercise::Init()
 
 update_status ModuleRenderExercise::Update()
 {
+	xRot += 0.01f;
+	yRot += 0.01f;
+	zRot += 0.01f;
+
+	math::float4x4 tMat = float4x4::identity;
+	tMat[0][3] = xT; tMat[1][3] = yT; tMat[2][3] = zT;
+
+	math::float4x4 rMat = math::Quat::FromEulerXYZ(xRot, yRot, zRot).ToFloat4x4();
+
+	math::float4x4 sMat = float4x4::identity;
+	sMat[0][0] *= xS; sMat[1][1] *= yS; sMat[2][2] *= zS;
+
+	model = sMat * tMat * rMat;
+
+	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
+		"model"), 1, GL_TRUE, &model[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
+		"view"), 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
+		"proj"), 1, GL_TRUE, &proj[0][0]);
+
 	glUseProgram(App->program->program);// ->useProgram();
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
