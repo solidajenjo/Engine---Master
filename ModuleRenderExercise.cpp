@@ -24,7 +24,7 @@ bool ModuleRenderExercise::Init()
 	zRot = 0;
 	xT = 0;
 	yT = 0;
-	zT = 0;
+	zT = -10;
 	xS = 1;
 	yS = 1;
 	zS = 1;

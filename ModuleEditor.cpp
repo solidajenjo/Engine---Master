@@ -6,6 +6,10 @@
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "Application.h"
+#include "SubModuleEditor.h"
+#include "SubModuleEditorMenu.h"
+#include "SubModuleEditorFPS.h"
+#include "SubModuleEditorConsole.h"
 #include "SDL.h"
 
 
@@ -33,9 +37,13 @@ bool ModuleEditor::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->context);
 	ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 
+	App->imGuiStarted = true;
 	// Setup style
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
+	subModules.push_back(new SubModuleEditorMenu());
+	subModules.push_back(new SubModuleEditorFPS());
+	subModules.push_back(new SubModuleEditorConsole());
 	return true;
 }
 
@@ -44,21 +52,23 @@ update_status ModuleEditor::PreUpdate()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+	ImGui::Begin("Editor");
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleEditor::Update()
 {
 
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	bool show_demo_window = true;
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	for (std::list<SubModuleEditor*>::iterator it = subModules.begin(); it != subModules.end(); ++it)
+	{
+		(*it)->drawSubmodule();
+	}
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleEditor::PostUpdate()
 {
+	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	return UPDATE_CONTINUE;
@@ -69,5 +79,9 @@ bool ModuleEditor::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+	for (std::list<SubModuleEditor*>::iterator it = subModules.begin(); it != subModules.end(); ++it)
+	{
+		delete *it;
+	}
 	return true;
 }

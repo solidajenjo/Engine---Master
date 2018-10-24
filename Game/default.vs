@@ -11,5 +11,5 @@ void main()
 {
 	vec4 vertex = proj*view*model*vec4(vertex_position, 1.0);
 	colorV = vec4(abs(vertex_position.x), abs(vertex_position.y), abs(vertex_position.x), 1.0);
- 	gl_Position = vec4(vertex.x / vertex.w, vertex.y / vertex.w, vertex.z / vertex.w, vertex.w);
+ 	gl_Position = vertex;
 }

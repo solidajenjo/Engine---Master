@@ -44,6 +44,7 @@ bool Application::Init()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
+	float startTime = SDL_GetTicks();
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		ret = (*it)->PreUpdate();
@@ -54,6 +55,15 @@ update_status Application::Update()
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		ret = (*it)->PostUpdate();
 
+	float frameTime = SDL_GetTicks() - startTime;
+	float fps = 1000 / frameTime;
+
+	if (fpsLogIterator == fpsLog.size())
+		fpsLogIterator = 0;
+
+	msLog[fpsLogIterator] = frameTime;
+	fpsLog[fpsLogIterator++] = fps;
+	
 	return ret;
 }
 

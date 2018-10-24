@@ -1,6 +1,7 @@
 #pragma once
 
 #include<list>
+#include<vector>
 #include "Globals.h"
 #include "Module.h"
 
@@ -31,6 +32,13 @@ public:
     ModuleRenderExercise* exercise = nullptr;
 	ModuleProgram* program = nullptr;
 	ModuleEditor* editor = nullptr;
+
+	std::vector<float> fpsLog = std::vector<float>(50);
+	std::vector<float> msLog = std::vector<float>(50);
+	int fpsLogIterator = 0;
+
+	ImGuiTextBuffer consoleBuffer;
+	bool imGuiStarted = false;
 
 private:
 

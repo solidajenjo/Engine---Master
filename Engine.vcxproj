@@ -47,7 +47,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <AdditionalIncludeDirectories>C:\Users\rubenar2\Documents\Engine---Master\imgui;./glew-2.1.0/include;./SDL/include;MathGeoLib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\imgui;./glew-2.1.0/include;./SDL/include;MathGeoLib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -64,7 +64,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <AdditionalIncludeDirectories>C:\Users\rubenar2\Documents\Engine---Master\imgui;./glew-2.1.0/include;./SDL/include;MathGeoLib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\imgui;./glew-2.1.0/include;./SDL/include;MathGeoLib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -78,7 +78,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
+    <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h" />
     <ClInclude Include="MathGeoLib\include\Geometry\AABB.h" />
     <ClInclude Include="MathGeoLib\include\Geometry\AABB2D.h" />
@@ -144,6 +144,10 @@
     <ClInclude Include="ModuleRenderExercise.h" />
     <ClInclude Include="ModuleTextures.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="SubModuleEditor.h" />
+    <ClInclude Include="SubModuleEditorConsole.h" />
+    <ClInclude Include="SubModuleEditorFPS.h" />
+    <ClInclude Include="SubModuleEditorMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -194,6 +198,13 @@
     <ClCompile Include="ModuleRenderExercise.cpp" />
     <ClCompile Include="ModuleTextures.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="SubModuleEditorConsole.cpp" />
+    <ClCompile Include="SubModuleEditorFPS.cpp" />
+    <ClCompile Include="SubModuleEditorMenu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Game\default.fs" />
+    <None Include="Game\default.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

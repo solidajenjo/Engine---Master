@@ -13,7 +13,7 @@ ModuleProgram::~ModuleProgram()
 
 bool ModuleProgram::Init()
 {
-	LOG("Program Creation");
+	LOG("Shader Program Creation");
 	program = glCreateProgram();
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
 	char* vSource = readFile("default.vs");
@@ -78,7 +78,7 @@ bool ModuleProgram::Init()
 
 	glDeleteShader(vs);
 	glDeleteShader(fs);
-	LOG("Program Created");
+	LOG("Shader Program Created");
 	return true;
 }
 
