@@ -3,7 +3,7 @@
 #include "ModuleRenderExercise.h"
 #include "ModuleWindow.h"
 #include "ModuleProgram.h"
-
+#include "ModuleCamera.h"
 #include "GL/glew.h"
 #include "SDL.h"
 
@@ -29,34 +29,7 @@ bool ModuleRenderExercise::Init()
 	yS = 1;
 	zS = 1;
 
-	//View
-	float3 target(0, 0, 0);
-	float3 eye(0, 0, 5);
-	float3 up(0, 1, 0);
-	math::float3 f(target - eye); f.Normalize();
-	math::float3 s(f.Cross(up)); s.Normalize();
-	math::float3 u(s.Cross(f));
 	
-	view[0][0] = s.x; view[0][1] = s.y; view[0][2] = s.z; 
-	view[1][0] = u.x; view[1][1] = u.y; view[1][2] = u.z; 
-	view[2][0] = -f.x; view[2][1] = -f.y; view[2][2] = -f.z;
-	view[0][3] = -s.Dot(eye); view[1][3] = -u.Dot(eye); view[2][3] = f.Dot(eye); 
-	view[3][0] = 0; view[3][1] = 0; view[3][2] = 0; view[3][3] = 1;
-
-	//Perspective
-	float aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
-
-	Frustum frustum;
-	frustum.type = FrustumType::PerspectiveFrustum;
-	frustum.pos = float3::zero;
-	frustum.front = -float3::unitZ;
-	frustum.up = float3::unitY;
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 100.0f;
-	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) *aspect);
-	proj = frustum.ProjectionMatrix();
-
 	float4 v1(-1.0f, -1.0f, 0.0f, 1.0f);
 	float4 v2(1.0f, -1.0f, 0.0f, 1.0f);
 	float4 v3(0.0f, 1.0f, 0.0f, 1.0f);
@@ -77,10 +50,32 @@ bool ModuleRenderExercise::Init()
 
 update_status ModuleRenderExercise::Update()
 {
+	math::float4x4 identity = float4x4::identity;
+	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
+		"model"), 1, GL_TRUE, &identity[0][0]);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(&(GLfloat)App->camera->view[0][0]);
+	glLineWidth(0.5f);
+
+	glBegin(GL_LINES);
+
+	float d = 200.0f;
+
+	for (float i = -d; i <= d; i += 1.0f)
+	{
+		glVertex3f(i, 0.0f, -d);
+		glVertex3f(i, 0.0f, d);
+		glVertex3f(-d, 0.0f, i);
+		glVertex3f(d, 0.0f, i);
+	}
+
+	glEnd();
+	
 	xRot += 0.01f;
 	yRot += 0.01f;
 	zRot += 0.01f;
-
+	
 	math::float4x4 tMat = float4x4::identity;
 	tMat[0][3] = xT; tMat[1][3] = yT; tMat[2][3] = zT;
 
@@ -94,9 +89,9 @@ update_status ModuleRenderExercise::Update()
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
 		"model"), 1, GL_TRUE, &model[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
-		"view"), 1, GL_TRUE, &view[0][0]);
+		"view"), 1, GL_TRUE, &App->camera->view[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
-		"proj"), 1, GL_TRUE, &proj[0][0]);
+		"proj"), 1, GL_TRUE, &App->camera->proj[0][0]);
 
 	glUseProgram(App->program->program);// ->useProgram();
     glEnableVertexAttribArray(0);
@@ -114,6 +109,9 @@ update_status ModuleRenderExercise::Update()
 
     glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	
 
 	return UPDATE_CONTINUE;
 }

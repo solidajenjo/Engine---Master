@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleRender.h"
 #include "Globals.h"
-
+#include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
@@ -95,7 +95,39 @@ int main(int argc, char ** argv)
 			case SDL_WINDOWEVENT:
 				if (sdlEvent.window.event == SDL_WINDOWEVENT_RESIZED || sdlEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 					App->renderer->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
+				break;
+				//User presses a key
+			case SDL_KEYDOWN:
+			{
+				//Select surfaces based on key press
+				switch (sdlEvent.key.keysym.sym)
+				{
+				case SDLK_q:
+					App->camera->camPos.y += 0.1f;
 					break;
+
+				case SDLK_e:
+					App->camera->camPos.y -= 0.1f;
+					break;
+				
+				case SDLK_a:
+					App->camera->camPos -= App->camera->s.Normalized() * 0.1f;
+					break;
+
+				case SDLK_d:
+					App->camera->camPos += App->camera->s.Normalized() * 0.1f;
+					break;
+				
+				case SDLK_w:
+					App->camera->camPos += App->camera->f.Normalized() * 0.1f;
+					break;
+
+				case SDLK_s:
+					App->camera->camPos -= App->camera->f.Normalized() * 0.1f;
+					break;
+
+				}
+			}
 			}
 		}
 	}

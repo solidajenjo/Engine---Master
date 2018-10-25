@@ -148,6 +148,9 @@
     <ClCompile Include="SubModuleEditorConsole.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleCamera.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -361,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="SubModuleEditorConsole.h">
       <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCamera.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

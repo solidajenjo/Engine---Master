@@ -12,6 +12,7 @@ class ModuleInput;
 class ModuleRenderExercise;
 class ModuleProgram;
 class ModuleEditor;
+class ModuleCamera;
 
 class Application
 {
@@ -32,6 +33,7 @@ public:
     ModuleRenderExercise* exercise = nullptr;
 	ModuleProgram* program = nullptr;
 	ModuleEditor* editor = nullptr;
+	ModuleCamera* camera = nullptr;
 
 	std::vector<float> fpsLog = std::vector<float>(50);
 	std::vector<float> msLog = std::vector<float>(50);

@@ -15,8 +15,7 @@ public:
 private:
     unsigned vbo        = 0;
 	float xRot, yRot, zRot, xT, yT, zT, xS, yS, zS;
-	math::float4x4 proj;
-	math::float4x4 view;
+
 	math::float4x4 model;
 };
 
