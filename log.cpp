@@ -21,7 +21,7 @@ void log(const char file[], int line, const char* format, ...)
 	{
 		std::string s(format);
 		s.append("\n");
-		App->consoleBuffer.appendfv(s.c_str(), ap);		
+		App->consoleBuffer.appendf(tmp_string2);		
 	}
 	
 }

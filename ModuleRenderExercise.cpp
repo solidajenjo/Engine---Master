@@ -4,7 +4,9 @@
 #include "ModuleWindow.h"
 #include "ModuleProgram.h"
 #include "ModuleCamera.h"
+#include "ModuleInput.h"
 #include "GL/glew.h"
+#include "Point.h"
 #include "SDL.h"
 
 
@@ -24,7 +26,7 @@ bool ModuleRenderExercise::Init()
 	zRot = 0;
 	xT = 0;
 	yT = 0;
-	zT = -10;
+	zT = 0;
 	xS = 1;
 	yS = 1;
 	zS = 1;
@@ -109,9 +111,68 @@ update_status ModuleRenderExercise::Update()
 
     glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+	GLfloat color[3] = { 1, 0, 0 };
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+	// red X
+	glUniform3f(glGetUniformLocation(App->program->program,
+		"color"), 1, 0, 0);
+	glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
+	glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
+	glEnd();
 
-
+	// green Y
 	
+	glUniform3fv(glGetUniformLocation(App->program->program,"color"), 1, &color[0]);
+	glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+	glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+	glVertex3f(0.0f, 1.15f, 0.0f); glVertex3f(0.0f, 1.05f, 0.0f);
+	
+	glUniform3f(glGetUniformLocation(App->program->program,
+		"color"), 0, 0, 1);
+	glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
+	glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
+	glVertex3f(-0.05f, -0.1f, 1.05f); glVertex3f(0.05f, -0.1f, 1.05f);
+	glEnd();
+	glLineWidth(1.0f);
+
+	float white[3] = { 1,0, 1 };
+	glUniform3f(glGetUniformLocation(App->program->program,
+		"color"), 1, GL_TRUE, white[0]);
+
+	iPoint mouseMotion = App->input->GetMouseMotion();
+	//App->camera->rotate(0.f, 0.01f, 0.f);
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+	{
+		
+		App->camera->rotate(-mouseMotion.y * 0.001f, -mouseMotion.x * 0.001f, .0f);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		App->camera->rotate(0.01f, 0.f, 0.f);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		App->camera->rotate(-0.01f, 0.f, 0.f);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		App->camera->rotate(0.f, 0.01f, 0.f);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		App->camera->rotate(0.f, -0.01f, 0.f);
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT) {
+		App->camera->camPos += App->camera->right * mouseMotion.x * 0.01f;
+		App->camera->camPos += App->camera->up * mouseMotion.y * (-0.01f);
+	}
 
 	return UPDATE_CONTINUE;
 }

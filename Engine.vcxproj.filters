@@ -151,6 +151,9 @@
     <ClCompile Include="ModuleCamera.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="SubModuleEditorCamera.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -368,6 +371,10 @@
     <ClInclude Include="ModuleCamera.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="SubModuleEditorCamera.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MathGeoLib">

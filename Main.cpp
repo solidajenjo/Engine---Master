@@ -17,7 +17,6 @@ enum main_states
 };
 
 Application* App = NULL;
-
 int main(int argc, char ** argv)
 {
 	int main_return = EXIT_FAILURE;
@@ -81,55 +80,6 @@ int main(int argc, char ** argv)
 
 		}
 
-		SDL_Event sdlEvent;
-
-		while (SDL_PollEvent(&sdlEvent) != 0)
-		{
-			// Esc button is pressed
-			switch (sdlEvent.type)
-			{
-			case SDL_QUIT:
-				state = MAIN_FINISH;
-				break;
-
-			case SDL_WINDOWEVENT:
-				if (sdlEvent.window.event == SDL_WINDOWEVENT_RESIZED || sdlEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-					App->renderer->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
-				break;
-				//User presses a key
-			case SDL_KEYDOWN:
-			{
-				//Select surfaces based on key press
-				switch (sdlEvent.key.keysym.sym)
-				{
-				case SDLK_q:
-					App->camera->camPos.y += 0.1f;
-					break;
-
-				case SDLK_e:
-					App->camera->camPos.y -= 0.1f;
-					break;
-				
-				case SDLK_a:
-					App->camera->camPos -= App->camera->s.Normalized() * 0.1f;
-					break;
-
-				case SDLK_d:
-					App->camera->camPos += App->camera->s.Normalized() * 0.1f;
-					break;
-				
-				case SDLK_w:
-					App->camera->camPos += App->camera->f.Normalized() * 0.1f;
-					break;
-
-				case SDLK_s:
-					App->camera->camPos -= App->camera->f.Normalized() * 0.1f;
-					break;
-
-				}
-			}
-			}
-		}
 	}
 	
 	LOG("Bye :)\n");

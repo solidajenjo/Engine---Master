@@ -10,6 +10,7 @@
 #include "SubModuleEditorMenu.h"
 #include "SubModuleEditorFPS.h"
 #include "SubModuleEditorConsole.h"
+#include "SubModuleEditorCamera.h"
 #include "SDL.h"
 
 
@@ -44,6 +45,7 @@ bool ModuleEditor::Init()
 	subModules.push_back(new SubModuleEditorMenu());
 	subModules.push_back(new SubModuleEditorFPS());
 	subModules.push_back(new SubModuleEditorConsole());
+	subModules.push_back(new SubModuleEditorCamera());
 	return true;
 }
 
