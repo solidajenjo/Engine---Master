@@ -4,8 +4,10 @@
 #include "ModuleWindow.h"
 #include "ModuleProgram.h"
 #include "ModuleCamera.h"
+#include "ModuleTextures.h"
 #include "GL/glew.h"
 #include "SDL.h"
+#include "il.h"
 
 
 ModuleRenderExercise::ModuleRenderExercise()
@@ -24,7 +26,7 @@ bool ModuleRenderExercise::Init()
 	zRot = 0;
 	xT = 0;
 	yT = 0;
-	zT = -10;
+	zT = -5;
 	xS = 1;
 	yS = 1;
 	zS = 1;
@@ -32,18 +34,38 @@ bool ModuleRenderExercise::Init()
 	
 	float4 v1(-1.0f, -1.0f, 0.0f, 1.0f);
 	float4 v2(1.0f, -1.0f, 0.0f, 1.0f);
-	float4 v3(0.0f, 1.0f, 0.0f, 1.0f);
+	float4 v3(-1.0f, 1.0f, 0.0f, 1.0f);
+	
+	float4 v4(1.0f, -1.0f, 0.0f, 1.0f);
+	float4 v5(1.0f, 1.0f, 0.0f, 1.0f);
+	float4 v6(-1.0f, 1.0f, 0.0f, 1.0f);
 
     float vertex_buffer_data[] = {
         v1[0], v1[1], v1[2],
 		v2[0], v2[1], v2[2],
 		v3[0], v3[1], v3[2],
+		v4[0], v4[1], v4[2],
+		v5[0], v5[1], v5[2],
+		v6[0], v6[1], v6[2],
+
+		0.f, 0.f,
+		1.f, 0.f,
+		0.f, 1.f,
+		1.f, 0.f,
+		1.f, 1.f,
+		0.f, 1.f
 	};
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+	textures = new ModuleTextures();
+	int w, h;
+	unsigned char* tex = textures->Load("Lenna.png", w, h);
+	glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), w, h, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
     return vbo;
 }
@@ -72,13 +94,13 @@ update_status ModuleRenderExercise::Update()
 
 	glEnd();
 	
-	xRot += 0.01f;
-	yRot += 0.01f;
-	zRot += 0.01f;
+	//xRot += 0.01f;
+	//yRot += 0.01f;
+	//zRot += 0.01f;
 	
 	math::float4x4 tMat = float4x4::identity;
 	tMat[0][3] = xT; tMat[1][3] = yT; tMat[2][3] = zT;
-
+	//ZYX
 	math::float4x4 rMat = math::Quat::FromEulerXYZ(xRot, yRot, zRot).ToFloat4x4();
 
 	math::float4x4 sMat = float4x4::identity;
@@ -95,6 +117,7 @@ update_status ModuleRenderExercise::Update()
 
 	glUseProgram(App->program->program);// ->useProgram();
     glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(
             0,                  // attribute 0
@@ -105,13 +128,19 @@ update_status ModuleRenderExercise::Update()
             (void*)0            // array buffer offset
             );
 
-    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(float) * 6 * 3) // buffer offset
+	);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(glGetUniformLocation(App->program->program, "texture0"), 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
 
     glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-	
 
 	return UPDATE_CONTINUE;
 }
@@ -123,6 +152,7 @@ bool ModuleRenderExercise::CleanUp()
         glDeleteBuffers(1, &vbo);
     }
 
+	delete textures;
 	return true;
 }
 

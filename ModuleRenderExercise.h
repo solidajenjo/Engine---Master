@@ -2,6 +2,9 @@
 #include "Module.h"
 #include "MathGeoLib.h"
 
+class ModuleTextures;
+class ModuleProgram;
+
 class ModuleRenderExercise : public Module
 {
 public:
@@ -17,6 +20,9 @@ private:
 	float xRot, yRot, zRot, xT, yT, zT, xS, yS, zS;
 
 	math::float4x4 model;
+
+	unsigned int lennaTex;
+	ModuleTextures* textures;
 };
 
 

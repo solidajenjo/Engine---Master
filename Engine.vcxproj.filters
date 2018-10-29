@@ -393,5 +393,11 @@
     <None Include="Game\default.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Game\axis.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Game\axis.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

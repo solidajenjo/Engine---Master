@@ -1,39 +1,28 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleRender.h"
 #include "ModuleTextures.h"
-#include "SDL/include/SDL.h"
-
-#include "SDL_image/include/SDL_image.h"
-#pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+#include "il.h"
+#include "ilut.h"
+#include "ilu.h"
 
 using namespace std;
 
 ModuleTextures::ModuleTextures()
 {
+	ilInit();
+	iluInit();
+	ilutInit();
 }
 
 // Destructor
 ModuleTextures::~ModuleTextures()
 {
-	IMG_Quit();
 }
 
 // Called before render is available
 bool ModuleTextures::Init()
 {
-	LOG("Init Image library");
 	bool ret = true;
-
-	// load support for the PNG image format
-	int flags = IMG_INIT_PNG;
-	int init = IMG_Init(flags);
-
-	if((init & flags) != flags)
-	{
-		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
-		ret = false;
-	}
 
 	return ret;
 }
@@ -41,40 +30,27 @@ bool ModuleTextures::Init()
 // Called before quitting
 bool ModuleTextures::CleanUp()
 {
-	LOG("Freeing textures and Image library");
-
-	for(list<SDL_Texture*>::iterator it = textures.begin(); it != textures.end(); ++it)
-		SDL_DestroyTexture(*it);
-
-	textures.clear();
 	return true;
 }
 
 // Load new texture from file path
-SDL_Texture* const ModuleTextures::Load(const char* path)
+unsigned char * ModuleTextures::Load(const char* path, int &xSize, int &ySize)
 {
-	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
+	ILuint ImageName;
+	ilGenImages(1, &ImageName);
 
-	if(surface == NULL)
+	ilBindImage(ImageName);
+	ilLoadImage(path);
+
+	ILinfo ImageInfo;
+	iluGetImageInfo(&ImageInfo);
+	if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
 	{
-		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+		iluFlipImage();
 	}
-	else
-	{
-		//texture = SDL_CreateTextureFromSurface(App->renderer->renderer, surface);
-
-		if(texture == NULL)
-		{
-			LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError());
-		}
-		else
-		{
-			textures.push_back(texture);
-		}
-
-		SDL_FreeSurface(surface);
-	}
-
-	return texture;
+	xSize = ImageInfo.Width;
+	ySize = ImageInfo.Height;
+	return ilGetData();
 }
+
+

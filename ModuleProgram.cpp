@@ -2,8 +2,10 @@
 #include <vector>
 
 
-ModuleProgram::ModuleProgram()
+ModuleProgram::ModuleProgram(char * vsName, char * fsName)
 {
+	this->vsName = vsName;
+	this->fsName = fsName;
 }
 
 
@@ -16,7 +18,7 @@ bool ModuleProgram::Init()
 	LOG("Shader Program Creation");
 	program = glCreateProgram();
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	char* vSource = readFile("default.vs");
+	char* vSource = readFile(vsName);
 	glShaderSource(vs, 1, &vSource, 0);
 	glCompileShader(vs);
 	free((void*)vSource);
@@ -36,7 +38,7 @@ bool ModuleProgram::Init()
 	
 
 	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	char* fSource = readFile("default.fs");
+	char* fSource = readFile(fsName);
 	glShaderSource(fs, 1, &fSource, 0);
 	glCompileShader(fs);
 	free((void*)fSource);

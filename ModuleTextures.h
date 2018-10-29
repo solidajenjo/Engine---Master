@@ -1,9 +1,7 @@
 #pragma once
-#include<list>
+#include<vector>
 #include "Module.h"
 #include "Globals.h"
-
-struct SDL_Texture;
 
 class ModuleTextures : public Module
 {
@@ -14,8 +12,6 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	SDL_Texture* const Load(const char* path);
+	unsigned char * Load(const char* path, int &xSize, int &ySize);
 
-private:
-	std::list<SDL_Texture*> textures;
 };

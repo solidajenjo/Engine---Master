@@ -6,7 +6,7 @@ class ModuleProgram :
 	public Module
 {
 public:
-	ModuleProgram();
+	ModuleProgram(char* vsName, char* fsName);
 	~ModuleProgram();
 
 	bool Init();
@@ -14,6 +14,9 @@ public:
 	bool CleanUp();
 	
 	GLuint program;
+	char* vsName;
+	char* fsName;
+
 private:
 
 	char* readFile(char* name);

@@ -45,7 +45,7 @@ bool ModuleCamera::Init()
 
 	camPos.x = 0;
 	camPos.y = 0;
-	camPos.z = 5;
+	camPos.z = 0;
 
 	return true;
 }
@@ -69,5 +69,5 @@ update_status ModuleCamera::Update()
 
 void ModuleCamera::recalcProjection(float hFOV, float zNear, float zFar)
 {
-
+	//MULTIPLICAR AL REVES LA ROTATION MATRIX
 }
