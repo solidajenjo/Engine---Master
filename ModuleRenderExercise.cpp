@@ -1,5 +1,5 @@
 #include "Application.h"
-
+#include "ModuleModelLoader.h"
 #include "ModuleRenderExercise.h"
 #include "ModuleWindow.h"
 #include "ModuleProgram.h"
@@ -55,11 +55,12 @@ bool ModuleRenderExercise::Init()
 		1.f, 1.f,
 		0.f, 1.f
 	};
-
+	/*
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+	*/
 	textures = new ModuleTextures();
 	int w, h;
 	unsigned char* tex = textures->Load("Lenna.png", w, h);
@@ -67,7 +68,8 @@ bool ModuleRenderExercise::Init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-    return vbo;
+	vao = App->modelLoader->Load("BakerHouse.fbx");
+    return true;
 }
 
 update_status ModuleRenderExercise::Update()
@@ -94,9 +96,9 @@ update_status ModuleRenderExercise::Update()
 
 	glEnd();
 	
-	//xRot += 0.01f;
-	//yRot += 0.01f;
-	//zRot += 0.01f;
+	xRot += 0.01f;
+	yRot += 0.01f;
+	zRot += 0.01f;
 	
 	math::float4x4 tMat = float4x4::identity;
 	tMat[0][3] = xT; tMat[1][3] = yT; tMat[2][3] = zT;
@@ -108,6 +110,8 @@ update_status ModuleRenderExercise::Update()
 
 	model = sMat * tMat * rMat;
 
+	glUseProgram(App->program->program);// ->useProgram();
+
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
 		"model"), 1, GL_TRUE, &model[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
@@ -115,43 +119,16 @@ update_status ModuleRenderExercise::Update()
 	glUniformMatrix4fv(glGetUniformLocation(App->program->program,
 		"proj"), 1, GL_TRUE, &App->camera->proj[0][0]);
 
-	glUseProgram(App->program->program);// ->useProgram();
-    glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(
-            0,                  // attribute 0
-            3,                  // number of componentes (3 floats)
-            GL_FLOAT,           // data type
-            GL_FALSE,           // should be normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-            );
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0,
-		(void*)(sizeof(float) * 6 * 3) // buffer offset
-	);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glUniform1i(glGetUniformLocation(App->program->program, "texture0"), 0);
-
-    glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
-
-    glDisableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+	
+	vao = App->modelLoader->Load("BakerHouse.fbx");
+	glBindVertexArray(0);
+	//glUseProgram(0);
 
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleRenderExercise::CleanUp()
 {
-    if(vbo != 0)
-    {
-        glDeleteBuffers(1, &vbo);
-    }
-
 	delete textures;
 	return true;
 }

@@ -16,7 +16,7 @@ public:
 	bool            CleanUp ();
 
 private:
-    unsigned vbo        = 0;
+    unsigned vao = 0;
 	float xRot, yRot, zRot, xT, yT, zT, xS, yS, zS;
 
 	math::float4x4 model;
