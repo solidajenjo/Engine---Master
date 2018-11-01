@@ -151,9 +151,7 @@
     <ClCompile Include="ModuleCamera.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="SubModuleEditorCamera.cpp">
-      <Filter>Editor</Filter>
-    </ClCompile>
+    <ClCompile Include="ModuleModelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -371,10 +369,7 @@
     <ClInclude Include="ModuleCamera.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="SubModuleEditorCamera.h">
-      <Filter>Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h" />
+    <ClInclude Include="ModuleModelLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MathGeoLib">
@@ -398,6 +393,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Game\default.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Game\axis.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Game\axis.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

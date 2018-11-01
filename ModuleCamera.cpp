@@ -49,6 +49,10 @@ bool ModuleCamera::Init()
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) *aspect);
 	proj = frustum.ProjectionMatrix();
 
+	camPos.x = 0;
+	camPos.y = 0;
+	camPos.z = 0;
+
 	return true;
 }
 
@@ -89,5 +93,5 @@ void ModuleCamera::rotate(float xRot, float yRot, float zRot)
 
 void ModuleCamera::recalcProjection(float hFOV, float zNear, float zFar)
 {
-
+	//MULTIPLICAR AL REVES LA ROTATION MATRIX
 }
